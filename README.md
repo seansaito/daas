@@ -1,3 +1,7 @@
+# Dakoku-as-a-Service AI (DaaSAI)
+
+Repo for the DaaSAI app
+
 ## Troubleshooting
 
 ---
