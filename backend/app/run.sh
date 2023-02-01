@@ -20,4 +20,6 @@ export PORT=${PORT:-8001}
 
 
 # run gunicorn
-exec gunicorn --bind $HOST:$PORT "$APP_MODULE" -k uvicorn.workers.UvicornWorker
+#exec gunicorn --bind $HOST:$PORT "$APP_MODULE" -k uvicorn.workers.UvicornWorker
+
+exec uvicorn --reload --host $HOST --port $PORT "$APP_MODULE"

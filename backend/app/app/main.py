@@ -4,6 +4,7 @@ from fastapi import FastAPI, APIRouter, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
+from app.api.api_v1.api import api_router
 
 root_router = APIRouter()
 app = FastAPI(
@@ -36,6 +37,7 @@ async def add_process_time_header(request: Request, call_next):
     return response
 
 
+app.include_router(api_router, prefix=settings.API_V1_STR)
 app.include_router(root_router)
 
 if __name__ == '__main__':

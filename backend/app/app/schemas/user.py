@@ -23,3 +23,7 @@ class UserInDBBase(UserBase):
 
 class User(UserInDBBase):
     ...
+
+class UserSearchResults(BaseModel):
+    results: t.Sequence[User]
+    
