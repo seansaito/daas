@@ -1,4 +1,5 @@
 .idea
+backend/app/database.db
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
@@ -173,3 +174,4 @@ poetry.toml
 .ruff_cache/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+/backend/app/data/

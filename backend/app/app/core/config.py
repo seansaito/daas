@@ -1,6 +1,8 @@
 from pydantic import AnyHttpUrl, BaseSettings, validator
 from typing import List, Optional, Union
 
+from app import DATA_DIR
+
 
 class Settings(BaseSettings):  # 1
     API_V1_STR: str = "/api/v1"  # 2
@@ -35,6 +37,8 @@ class Settings(BaseSettings):  # 1
     FIRST_SUPERUSER: str = "150127"
     FIRST_SUPERUSER_PW: str = "dakokuai"
     COMPANY_CODE: str = "Bcg237"
+    
+    INITIAL_DATA_PATH: str = str(DATA_DIR / 'accounts.csv')
     
     class Config:
         case_sensitive = True  # 4

@@ -1,13 +1,9 @@
-from pathlib import Path
 import time
 
 from fastapi import FastAPI, APIRouter, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
-
-ROOT = Path(__file__).resolve().parent.parent
-BASE_PATH = Path(__file__).resolve().parent
 
 root_router = APIRouter()
 app = FastAPI(

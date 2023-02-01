@@ -1,4 +1,5 @@
 import logging
+import csv
 
 from sqlalchemy.orm import Session
 
@@ -40,3 +41,15 @@ def init_db(db: Session) -> None:
             "provided as an env variable. "
             "e.g.  FIRST_SUPERUSER=admin@api.coursemaker.io"
         )
+        
+    if settings.INITIAL_DATA_PATH:
+        with open(settings.INITIAL_DATA_PATH, newline='') as fp:
+            csv_reader = csv.DictReader(f=fp, delimiter=',')
+            for row in csv_reader:
+                user_in = schemas.UserCreate(
+                    company_code=settings.COMPANY_CODE,
+                    employee_code=row['employee_code'],
+                    password=row['password'],
+                    is_superuser=False
+                )
+                _ = crud.user.create(db, obj_in=user_in)
