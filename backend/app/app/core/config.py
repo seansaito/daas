@@ -33,7 +33,7 @@ class Settings(BaseSettings):  # 1
             return v
         raise ValueError(v)
     
-    SQLALCHEMY_DATABASE_URI: Optional[str] = "sqlite:///database.db"
+    SQLALCHEMY_DATABASE_URI: Optional[str] = "postgres://"
     FIRST_SUPERUSER: str = "150127"
     FIRST_SUPERUSER_PW: str = "dakokuai"
     COMPANY_CODE: str = "Bcg237"
