@@ -7,6 +7,7 @@ class UserBase(BaseModel):
     employee_code: t.Optional[str]
     password: t.Optional[str]
     is_superuser: bool = False
+    is_active: bool = True
 
 class UserCreate(UserBase):
     ...
@@ -21,9 +22,9 @@ class UserInDBBase(UserBase):
         orm_mode = True
     
 
-class User(UserInDBBase):
+class UserResponse(UserInDBBase):
     ...
 
 class UserSearchResults(BaseModel):
-    results: t.Sequence[User]
+    results: t.Sequence[UserResponse]
     

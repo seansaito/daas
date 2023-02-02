@@ -31,7 +31,7 @@ def login(
     }
 
 
-@router.get('/me', response_model=schemas.User)
+@router.get('/me', response_model=schemas.UserResponse)
 def read_users_me(current_user: User = Depends(deps.get_current_user)):
     """
     Fetch the current user
@@ -39,7 +39,7 @@ def read_users_me(current_user: User = Depends(deps.get_current_user)):
     user = current_user
     return user.__dict__
 
-@router.post("/signup", response_model=schemas.User, status_code=201)
+@router.post("/signup", response_model=schemas.UserResponse, status_code=201)
 def create_user_signup(
         *,
         db: Session = Depends(deps.get_db),

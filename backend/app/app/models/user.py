@@ -9,4 +9,5 @@ class User(Base):
     employee_code = Column(String(256), nullable=False)
     password = Column(String(256), nullable=False)
     is_superuser = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=True)
     

@@ -28,11 +28,12 @@ def init_db(db: Session) -> None:
                 employee_code=settings.FIRST_SUPERUSER,
                 password=settings.FIRST_SUPERUSER_PW,
                 is_superuser=True,
+                is_active=True,
             )
             user = crud.user.create(db, obj_in=user_in)  # noqa: F841
         else:
             logger.warning(
-                "Skipping creating superuser. User with email "
+                "Skipping creating superuser. UserResponse with email "
                 f"{settings.FIRST_SUPERUSER} already exists. "
             )
     else:
@@ -50,6 +51,7 @@ def init_db(db: Session) -> None:
                     company_code=settings.COMPANY_CODE,
                     employee_code=row['employee_code'],
                     password=row['password'],
-                    is_superuser=False
+                    is_superuser=False,
+                    is_active=True,
                 )
                 _ = crud.user.create(db, obj_in=user_in)
