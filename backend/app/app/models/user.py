@@ -10,4 +10,8 @@ class User(Base):
     password = Column(String(256), nullable=False)
     is_superuser = Column(Boolean, default=False)
     is_active = Column(Boolean, default=True)
+    work_start = Column(Integer, nullable=False, default=9)
+    work_end = Column(Integer, nullable=False, default=20)
+    rest_start = Column(Integer, nullable=False, default=12)
+    rest_end = Column(Integer, nullable=False, default=13)
     

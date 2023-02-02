@@ -29,6 +29,10 @@ def init_db(db: Session) -> None:
                 password=settings.FIRST_SUPERUSER_PW,
                 is_superuser=True,
                 is_active=True,
+                work_start=9,
+                work_end=20,
+                rest_start=12,
+                rest_end=13,
             )
             user = crud.user.create(db, obj_in=user_in)  # noqa: F841
         else:
@@ -55,6 +59,10 @@ def init_db(db: Session) -> None:
                         password=row['password'],
                         is_superuser=False,
                         is_active=True,
+                        work_start=9,
+                        work_end=20,
+                        rest_start=12,
+                        rest_end=13,
                     )
                     _ = crud.user.create(db, obj_in=user_in)
                 else:
