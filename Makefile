@@ -5,6 +5,11 @@ HEROKU_APP_NAME=daas-ai-backend
 HEROKU_FRONTEND_APP_NAME=daas-ai-frontend
 COMMIT_ID=$(shell git rev-parse HEAD)
 
+docker-up-local:
+	docker-compose -f docker-compose.local.yml up -d
+
+docker-down-local:
+	docker-compose -f docker-compose.local.yml down -v
 
 heroku-login:
 	HEROKU_API_KEY=${HEROKU_API_KEY} heroku auth:token
