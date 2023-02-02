@@ -47,11 +47,16 @@ def init_db(db: Session) -> None:
         with open(settings.INITIAL_DATA_PATH, newline='') as fp:
             csv_reader = csv.DictReader(f=fp, delimiter=',')
             for row in csv_reader:
-                user_in = schemas.UserCreate(
-                    company_code=settings.COMPANY_CODE,
-                    employee_code=row['employee_code'],
-                    password=row['password'],
-                    is_superuser=False,
-                    is_active=True,
-                )
-                _ = crud.user.create(db, obj_in=user_in)
+                user = crud.user.get_by_employee_code(db, employee_code=row["employee_code"])
+                if not user:
+                    user_in = schemas.UserCreate(
+                        company_code=settings.COMPANY_CODE,
+                        employee_code=row['employee_code'],
+                        password=row['password'],
+                        is_superuser=False,
+                        is_active=True,
+                    )
+                    _ = crud.user.create(db, obj_in=user_in)
+                else:
+                    logger.warning(f"Skipping creation of user {row['employee_code']}")
+                    

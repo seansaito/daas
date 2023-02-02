@@ -21,6 +21,8 @@ push-app-heroku: heroku-container-login
 release-heroku: heroku-container-login
 	heroku container:release web --app $(HEROKU_APP_NAME)
 
+do-all-heroku: build-app-heroku push-app-heroku release-heroku
+
 deploy-frontend-heroku: heroku-login
 	cd .. && git subtree push --prefix ./frontend https://heroku:${HEROKU_API_KEY}@git.heroku.com/$(HEROKU_FRONTEND_APP_NAME).git main
 
