@@ -44,6 +44,7 @@ def create_user_signup(
         *,
         db: Session = Depends(deps.get_db),
         user_in: schemas.user.UserCreate,
+        current_super_user: User = Depends(deps.get_current_active_superuser)
 ) -> Any:
     """Create new user without the need to be logged in"""
     user = db.query(User).filter(User.employee_code == user_in.employee_code).first()
