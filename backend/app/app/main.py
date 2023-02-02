@@ -8,7 +8,7 @@ from app.api.api_v1.api import api_router
 
 root_router = APIRouter()
 app = FastAPI(
-    title='DaaS AI', openapi_url='/openapi.json'
+    title='DaaS AI', openapi_url='/openapi.json', description="The Official Dakoku-as-a-Service Platform"
 )
 
 # Set all CORS enabled origins
