@@ -4,6 +4,8 @@ Repo for the DaaSAI app
 
 ## Setup
 
+### Env
+
 * Create `.env` from the sample provided 
 
 ```shell
@@ -11,6 +13,38 @@ $ copy .env.sample .env
 ```
 
 * Replace `COMPANY_CODE` with the correct value
+
+### Provisioning
+
+```shell
+$ cd infra
+$ ./deploy.sh
+```
+
+What happens under the hood:
+
+1. Run Terraform
+
+```shell
+# Initialize
+$ cd daas/infra
+$ terraform init
+
+# Plan deployment
+$ terraform plan
+
+# Apply
+$ terraform apply
+```
+
+2. Run Ansible
+
+```shell
+$ ansible-playbook -i '<ec2-ip>,' -u ubuntu --private-key=/path/to/private/key setup.yml
+```
+
+* Replace `<ec2-ip>` with the actual IP address of the EC2 instance outputted by Terraform
+* Replace `/path/to/private/key` with actual private key path
 
 
 ## Data
