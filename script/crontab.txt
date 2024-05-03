@@ -1,0 +1,4 @@
+00 09 * * 1-5 grep `date "+\%Y/\%-m/\%-d"`, /home/ubuntu/holidays.csv > /dev/null || /usr/bin/python3 ~/dakoku.py --mode=work_start && /usr/bin/python3 ~/dakoku_shimmei.py --mode=work_start
+00 12 * * 1-5 grep `date "+\%Y/\%-m/\%-d"`, /home/ubuntu/holidays.csv > /dev/null || /usr/bin/python3 ~/dakoku.py --mode=rest_start && /usr/bin/python3 ~/dakoku_shimmei.py --mode=rest_start
+00 13 * * 1-5 grep `date "+\%Y/\%-m/\%-d"`, /home/ubuntu/holidays.csv > /dev/null || /usr/bin/python3 ~/dakoku.py --mode=rest_end && /usr/bin/python3 ~/dakoku_shimmei.py --mode=rest_end
+00 21 * * 1-5 grep `date "+\%Y/\%-m/\%-d"`, /home/ubuntu/holidays.csv > /dev/null || /usr/bin/python3 ~/dakoku.py --mode=work_end && /usr/bin/python3 ~/dakoku_shimmei.py --mode=work_end

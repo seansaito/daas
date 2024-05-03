@@ -2,6 +2,23 @@
 
 Repo for the DaaSAI app
 
+## Setup
+
+* Create `.env` from the sample provided 
+
+```shell
+$ copy .env.sample .env
+```
+
+* Replace `COMPANY_CODE` with the correct value
+
+
+## Data
+
+* Place account information in `data.csv` under the `scripts` directory
+* Japanese public holidays: https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html
+
+
 ## Troubleshooting
 
 ---
