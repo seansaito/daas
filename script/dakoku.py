@@ -1,3 +1,4 @@
+import os
 import time
 import click
 import random
@@ -121,16 +122,23 @@ class TimeStamper:
 @click.option("--mode", type=str, required=True)
 @click.option("--test", is_flag=True, show_default=True, default=False, required=False)
 def main(mode: str, test: bool):
+    import chromedriver_binary
+
     if test:
+        print("Test mode")
         pass
     else:
         slp_time = int(random.uniform(1, 1000))
         print("Sleeping for {} seconds".format(slp_time))
         time.sleep(int(slp_time))
 
-    # for (user, pw) in [('159464', '0000'),  ('145162', 'fflp5mcr')]:
-    df_data = pd.read_csv('data.csv')
-    list_data = zip(df_data['user'].values, df_data['pw'].values)
+    # A bit hacky way of path management in local vs. dev
+    if os.path.exists('data.csv'):
+        df_data = pd.read_csv('data.csv', dtype=str)
+    else:
+        df_data = pd.read_csv('/home/ubuntu/script/data.csv', dtype=str)
+
+    list_data = list(zip(df_data['user'].values, df_data['pw'].values))
     print("Data: ", list_data)
 
     for (user, pw) in list_data:
@@ -146,3 +154,6 @@ def main(mode: str, test: bool):
         timestamper.driver.delete_all_cookies()
         timestamper.driver.quit()
         print('Done')
+
+if __name__ == '__main__':
+    main()
