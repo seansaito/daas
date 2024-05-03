@@ -1,0 +1,53 @@
+- hosts: all
+  become: yes
+  vars:
+    local_path: "../script"  # Relative path from 'daas/infra' to 'daas/script'
+    remote_path: "/home/ubuntu"  # Adjust according to your server structure
+  tasks:
+    - name: Update the package list
+      apt:
+        update_cache: yes
+
+    - name: Install Python 3 and pip
+      apt:
+        name:
+          - python3
+          - python3-pip
+        state: present
+
+    - name: Ensure the directory exists on the remote server
+      file:
+        path: "{{ remote_path }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy the local directory to the remote server
+      synchronize:
+        src: "{{ local_path }}"
+        dest: "{{ remote_path }}"
+        recursive: yes
+        delete: yes  # Set to yes to delete remote files not present locally
+
+    - name: Install Python packages from requirements.txt
+      pip:
+        requirements: "{{ remote_path }}/requirements.txt"
+        executable: pip3
+
+    - name: Test the script
+      command: python3 {{ remote_path }}/dakoku.py
+      register: script_output
+    - debug:
+        var: script_output.stdout_lines
+
+    - name: Setup cron jobs
+      cron:
+        name: "{{ item.name }}"
+        minute: "{{ item.minute }}"
+        hour: "{{ item.hour }}"
+        weekday: "{{ item.weekday }}"
+        job: "python3 {{ remote_path }}/dakoku.py > /var/log/{{ item.logfile }} 2>&1"
+      loop:
+        - { name: "Run script at 9 AM", minute: "0", hour: "9", weekday: "1-5", logfile: "dakoku_9am.log" }
+        - { name: "Run script at 12 PM", minute: "0", hour: "12", weekday: "1-5", logfile: "dakoku_12pm.log" }
+        - { name: "Run script at 1 PM", minute: "0", hour: "13", weekday: "1-5", logfile: "dakoku_1pm.log" }
+        - { name: "Run script at 9 PM", minute: "0", hour: "21", weekday: "1-5", logfile: "dakoku_9pm.log" }
