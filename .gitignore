@@ -3,7 +3,7 @@
 # Terraform
 *.terraform.lock.hcl
 *.terraform.tfstate.lock
-*/terraform.tfstate*
+*terraform.tfstate*
 */.terraform
 
 .idea
