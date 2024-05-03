@@ -98,12 +98,13 @@
         var: script_output.stdout_lines
 
     - name: Setup cron jobs
-      cron:
+      ansible.builtin.cron:
         name: "{{ item.name }}"
         minute: "{{ item.minute }}"
         hour: "{{ item.hour }}"
         weekday: "{{ item.weekday }}"
-        job: "python3 {{ remote_path }}/{{ directory_name }}/dakoku.py {{ item.command }} > /var/log/{{ item.logfile }} 2>&1"
+        job: 'grep `date "+\%Y/\%-m/\%-d"`, {{ remote_path }}/{{ directory_name }}/holidays.csv > /dev/null || python3 {{ remote_path }}/{{ directory_name }}/dakoku.py {{ item.command }} > /var/log/{{ item.logfile }} 2>&1'
+        user: ubuntu
       loop:
         - { name: "Run script at 9 AM", minute: "0", hour: "9", weekday: "1-5", logfile: "dakoku_9am.log", command: "--mode=work_start"}
         - { name: "Run script at 12 PM", minute: "0", hour: "12", weekday: "1-5", logfile: "dakoku_12pm.log", command: "--mode=rest_start" }
