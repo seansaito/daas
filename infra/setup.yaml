@@ -3,6 +3,7 @@
   vars:
     local_path: "../script"  # Relative path from 'daas/infra' to 'daas/script'
     remote_path: "/home/ubuntu"  # Adjust according to your server structure
+    directory_name: "script"
   tasks:
     - name: Update the package list
       apt:
@@ -14,6 +15,51 @@
           - python3
           - python3-pip
         state: present
+
+    - name: Install dependencies for Google Chrome
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      with_items:
+        - wget
+        - unzip
+        - ca-certificates
+        - fonts-liberation
+        - libappindicator3-1
+        - libasound2
+        - libatk-bridge2.0-0
+        - libatk1.0-0
+        - libatspi2.0-0
+        - libcups2
+        - libdbus-1-3
+        - libgdk-pixbuf2.0-0
+        - libnspr4
+        - libnss3
+        - libx11-xcb1
+        - libxcomposite1
+        - libxdamage1
+        - libxrandr2
+        - xdg-utils
+        - libgbm1
+        - libxss1
+        - libcairo2-dev
+        - pkg-config
+#
+    - name: Download Google Chrome
+      get_url:
+        url: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+        dest: "/tmp/google-chrome-stable_current_amd64.deb"
+
+    - name: Correct ownership of google chrome
+      file:
+        path: "/tmp/google-chrome-stable_current_amd64.deb"
+        owner: ubuntu
+        group: ubuntu
+
+    - name: Install Google Chrome
+      apt:
+        deb: "/tmp/google-chrome-stable_current_amd64.deb"
 
     - name: Ensure the directory exists on the remote server
       file:
@@ -28,13 +74,25 @@
         recursive: yes
         delete: yes  # Set to yes to delete remote files not present locally
 
+    - name: Correct ownership of the script directory
+      file:
+        path: "{{ remote_path }}/{{ directory_name }}"
+        owner: ubuntu
+        group: ubuntu
+        recurse: yes
+
     - name: Install Python packages from requirements.txt
       pip:
-        requirements: "{{ remote_path }}/requirements.txt"
+        requirements: "{{ remote_path }}/{{ directory_name }}/requirements.txt"
+        executable: pip3
+
+    - name: Install chrome driver with auto version detection
+      pip:
+        name: chromedriver-binary-auto
         executable: pip3
 
     - name: Test the script
-      command: python3 {{ remote_path }}/dakoku.py
+      command: python3 {{ remote_path }}/{{ directory_name }}/dakoku.py --mode=work_start --test
       register: script_output
     - debug:
         var: script_output.stdout_lines
@@ -45,9 +103,9 @@
         minute: "{{ item.minute }}"
         hour: "{{ item.hour }}"
         weekday: "{{ item.weekday }}"
-        job: "python3 {{ remote_path }}/dakoku.py > /var/log/{{ item.logfile }} 2>&1"
+        job: "python3 {{ remote_path }}/{{ directory_name }}/dakoku.py {{ item.command }} > /var/log/{{ item.logfile }} 2>&1"
       loop:
-        - { name: "Run script at 9 AM", minute: "0", hour: "9", weekday: "1-5", logfile: "dakoku_9am.log" }
-        - { name: "Run script at 12 PM", minute: "0", hour: "12", weekday: "1-5", logfile: "dakoku_12pm.log" }
-        - { name: "Run script at 1 PM", minute: "0", hour: "13", weekday: "1-5", logfile: "dakoku_1pm.log" }
-        - { name: "Run script at 9 PM", minute: "0", hour: "21", weekday: "1-5", logfile: "dakoku_9pm.log" }
+        - { name: "Run script at 9 AM", minute: "0", hour: "9", weekday: "1-5", logfile: "dakoku_9am.log", command: "--mode=work_start"}
+        - { name: "Run script at 12 PM", minute: "0", hour: "12", weekday: "1-5", logfile: "dakoku_12pm.log", command: "--mode=rest_start" }
+        - { name: "Run script at 1 PM", minute: "0", hour: "13", weekday: "1-5", logfile: "dakoku_1pm.log", command: "--mode=rest_end" }
+        - { name: "Run script at 9 PM", minute: "0", hour: "21", weekday: "1-5", logfile: "dakoku_9pm.log", command: "--mode=work_end" }

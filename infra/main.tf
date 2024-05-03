@@ -4,13 +4,13 @@ provider "aws" {
 
 resource "aws_instance" "example" {
   ami           = "ami-0cd7ad8676931d727"  # Example AMI for Ubuntu in ap-northeast-1, check for the latest
-  instance_type = "t2.nano"
+  instance_type = "t2.micro"
   key_name      = aws_key_pair.deployer.key_name
 
   security_groups = [aws_security_group.allow_ssh.name]
 
   tags = {
-    Name = "CronJobInstance"
+    Name = "DakokuCronJobInstance"
   }
 }
 
